@@ -48,11 +48,11 @@ ui <- fluidPage(
       4,
       h3("Select Movie Genres You Prefer (order matters):"),
       wellPanel(
-        selectInput("input_genre", "Genre #1",
+        pickerInput("input_genre", "Genre #1",
                     genre_list),
-        selectInput("input_genre2", "Genre #2",
+        pickerInput("input_genre2", "Genre #2",
                     genre_list),
-        selectInput("input_genre3", "Genre #3",
+        pickerInput("input_genre3", "Genre #3",
                     genre_list)
         #submitButton("Update List of Movies")
       )
@@ -77,7 +77,7 @@ ui <- fluidPage(
     column(
       2,
       textInput("apiKey", "API Key", "sk-xxxxxxxxxxxxxxxxxxxx"),
-      selectInput(
+      pickerInput(
         "model",
         "Model",
         choices = c("gpt-3.5-turbo", "gpt-4"),
@@ -131,107 +131,158 @@ server <- function(input, output, session) {
         options = pickerOptions(liveSearch = TRUE,
                                 maxOptions = 1L)
       ),
-      "Adventure" = selectInput(
+      "Adventure" = pickerInput(
         "select",
         "Movie of Genre #1",
         choices = sort(subset(search, Adventure == 1)$title),
-        selected = sort(subset(search, Adventure == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Animation" =  selectInput(
+      "Animation" =  pickerInput(
         "select",
         "Movie of Genre #1",
         choices = sort(subset(search, Animation == 1)$title),
-        selected = sort(subset(search, Animation == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Children" =  selectInput(
+      "Children" =  pickerInput(
         "select",
         "Movie of Genre #1",
         choices = sort(subset(search, Children == 1)$title),
-        selected = sort(subset(search, Children == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Comedy" =  selectInput(
+      "Comedy" =  pickerInput(
         "select",
         "Movie of Genre #1",
         choices = sort(subset(search, Comedy == 1)$title),
-        selected = sort(subset(search, Comedy == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Crime" =  selectInput(
+      "Crime" =  pickerInput(
         "select",
         "Movie of Genre #1",
         choices = sort(subset(search, Crime == 1)$title),
-        selected = sort(subset(search, Crime == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Documentary" =  selectInput(
+      "Documentary" =  pickerInput(
         "select",
         "Movie of Genre #1",
         choices = sort(subset(search, Documentary == 1)$title),
-        selected = sort(subset(search, Documentary == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Drama" =  selectInput(
+      "Drama" =  pickerInput(
         "select",
         "Movie of Genre #1",
         choices = sort(subset(search, Drama == 1)$title),
-        selected = sort(subset(search, Drama == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Fantasy" =  selectInput(
+      "Fantasy" =  pickerInput(
         "select",
         "Movie of Genre #1",
         choices = sort(subset(search, Fantasy == 1)$title),
-        selected = sort(subset(search, Fantasy == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Film.Noir" =  selectInput(
+      "Film.Noir" =  pickerInput(
         "select",
         "Movie of Genre #1",
         choices = sort(subset(search, Film.Noir == 1)$title),
-        selected = sort(subset(search, Film.Noir == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Horror" =  selectInput(
+      "Horror" =  pickerInput(
         "select",
         "Movie of Genre #1",
         choices = sort(subset(search, Horror == 1)$title),
-        selected = sort(subset(search, Horror == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Musical" =  selectInput(
+      "Musical" =  pickerInput(
         "select",
         "Movie of Genre #1",
         choices = sort(subset(search, Musical == 1)$title),
-        selected = sort(subset(search, Musical == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Mystery" =  selectInput(
+      "Mystery" =  pickerInput(
         "select",
         "Movie of Genre #1",
         choices = sort(subset(search, Mystery == 1)$title),
-        selected = sort(subset(search, Mystery == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Romance" =  selectInput(
+      "Romance" =  pickerInput(
         "select",
         "Movie of Genre #1",
         choices = sort(subset(search, Romance == 1)$title),
-        selected = sort(subset(search, Romance == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Sci.Fi" =  selectInput(
+      "Sci.Fi" =  pickerInput(
         "select",
         "Movie of Genre #1",
         choices = sort(subset(search, Sci.Fi == 1)$title),
-        selected = sort(subset(search, Sci.Fi == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Thriller" =  selectInput(
+      "Thriller" =  pickerInput(
         "select",
         "Movie of Genre #1",
         choices = sort(subset(search, Thriller == 1)$title),
-        selected = sort(subset(search, Thriller == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "War" =  selectInput(
+      "War" =  pickerInput(
         "select",
         "Movie of Genre #1",
         choices = sort(subset(search, War == 1)$title),
-        selected = sort(subset(search, War == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Western" = selectInput(
+      "Western" = pickerInput(
         "select",
         "Movie of Genre #1",
         choices = sort(subset(search, Western == 1)$title),
-        selected = sort(subset(search, Western == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       )
     )
   })
@@ -242,113 +293,167 @@ server <- function(input, output, session) {
 
     switch(
       input$input_genre2,
-      "Action" = selectInput(
+      "Action" = pickerInput(
         "select2",
         "Movie of Genre #2",
         choices = sort(subset(search, Action == 1)$title),
-        selected = sort(subset(search, Action == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Adventure" = selectInput(
+      "Adventure" = pickerInput(
         "select2",
         "Movie of Genre #2",
         choices = sort(subset(search, Adventure == 1)$title),
-        selected = sort(subset(search, Adventure == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Animation" =  selectInput(
+      "Animation" =  pickerInput(
         "select2",
         "Movie of Genre #2",
         choices = sort(subset(search, Animation == 1)$title),
-        selected = sort(subset(search, Animation == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Children" =  selectInput(
+      "Children" =  pickerInput(
         "select2",
         "Movie of Genre #2",
         choices = sort(subset(search, Children == 1)$title),
-        selected = sort(subset(search, Children == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Comedy" =  selectInput(
+      "Comedy" =  pickerInput(
         "select2",
         "Movie of Genre #2",
         choices = sort(subset(search, Comedy == 1)$title),
-        selected = sort(subset(search, Comedy == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Crime" =  selectInput(
+      "Crime" =  pickerInput(
         "select2",
         "Movie of Genre #2",
         choices = sort(subset(search, Crime == 1)$title),
-        selected = sort(subset(search, Crime == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Documentary" =  selectInput(
+      "Documentary" =  pickerInput(
         "select2",
         "Movie of Genre #2",
         choices = sort(subset(search, Documentary == 1)$title),
-        selected = sort(subset(search, Documentary == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Drama" =  selectInput(
+      "Drama" =  pickerInput(
         "select2",
         "Movie of Genre #2",
         choices = sort(subset(search, Drama == 1)$title),
-        selected = sort(subset(search, Drama == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Fantasy" =  selectInput(
+      "Fantasy" =  pickerInput(
         "select2",
         "Movie of Genre #2",
         choices = sort(subset(search, Fantasy == 1)$title),
-        selected = sort(subset(search, Fantasy == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Film.Noir" =  selectInput(
+      "Film.Noir" =  pickerInput(
         "select2",
         "Movie of Genre #2",
         choices = sort(subset(search, Film.Noir == 1)$title),
-        selected = sort(subset(search, Film.Noir == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Horror" =  selectInput(
+      "Horror" =  pickerInput(
         "select2",
         "Movie of Genre #2",
         choices = sort(subset(search, Horror == 1)$title),
-        selected = sort(subset(search, Horror == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Musical" =  selectInput(
+      "Musical" =  pickerInput(
         "select2",
         "Movie of Genre #2",
         choices = sort(subset(search, Musical == 1)$title),
-        selected = sort(subset(search, Musical == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Mystery" =  selectInput(
+      "Mystery" =  pickerInput(
         "select2",
         "Movie of Genre #2",
         choices = sort(subset(search, Mystery == 1)$title),
-        selected = sort(subset(search, Mystery == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Romance" =  selectInput(
+      "Romance" =  pickerInput(
         "select2",
         "Movie of Genre #2",
         choices = sort(subset(search, Romance == 1)$title),
-        selected = sort(subset(search, Romance == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Sci.Fi" =  selectInput(
+      "Sci.Fi" =  pickerInput(
         "select2",
         "Movie of Genre #2",
         choices = sort(subset(search, Sci.Fi == 1)$title),
-        selected = sort(subset(search, Sci.Fi == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Thriller" =  selectInput(
+      "Thriller" =  pickerInput(
         "select2",
         "Movie of Genre #2",
         choices = sort(subset(search, Thriller == 1)$title),
-        selected = sort(subset(search, Thriller == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "War" =  selectInput(
+      "War" =  pickerInput(
         "select2",
         "Movie of Genre #2",
         choices = sort(subset(search, War == 1)$title),
-        selected = sort(subset(search, War == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Western" = selectInput(
+      "Western" = pickerInput(
         "select2",
         "Movie of Genre #2",
         choices = sort(subset(search, Western == 1)$title),
-        selected = sort(subset(search, Western == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       )
     )
   })
@@ -359,113 +464,167 @@ server <- function(input, output, session) {
 
     switch(
       input$input_genre3,
-      "Action" = selectInput(
+      "Action" = pickerInput(
         "select3",
         "Movie of Genre #3",
         choices = sort(subset(search, Action == 1)$title),
-        selected = sort(subset(search, Action == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Adventure" = selectInput(
+      "Adventure" = pickerInput(
         "select3",
         "Movie of Genre #3",
         choices = sort(subset(search, Adventure == 1)$title),
-        selected = sort(subset(search, Adventure == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Animation" =  selectInput(
+      "Animation" =  pickerInput(
         "select3",
         "Movie of Genre #3",
         choices = sort(subset(search, Animation == 1)$title),
-        selected = sort(subset(search, Animation == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Children" =  selectInput(
+      "Children" =  pickerInput(
         "select3",
         "Movie of Genre #3",
         choices = sort(subset(search, Children == 1)$title),
-        selected = sort(subset(search, Children == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Comedy" =  selectInput(
+      "Comedy" =  pickerInput(
         "select3",
         "Movie of Genre #3",
         choices = sort(subset(search, Comedy == 1)$title),
-        selected = sort(subset(search, Comedy == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Crime" =  selectInput(
+      "Crime" =  pickerInput(
         "select3",
         "Movie of Genre #3",
         choices = sort(subset(search, Crime == 1)$title),
-        selected = sort(subset(search, Crime == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Documentary" =  selectInput(
+      "Documentary" =  pickerInput(
         "select3",
         "Movie of Genre #3",
         choices = sort(subset(search, Documentary == 1)$title),
-        selected = sort(subset(search, Documentary == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Drama" =  selectInput(
+      "Drama" =  pickerInput(
         "select3",
         "Movie of Genre #3",
         choices = sort(subset(search, Drama == 1)$title),
-        selected = sort(subset(search, Drama == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Fantasy" =  selectInput(
+      "Fantasy" =  pickerInput(
         "select3",
         "Movie of Genre #3",
         choices = sort(subset(search, Fantasy == 1)$title),
-        selected = sort(subset(search, Fantasy == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Film.Noir" =  selectInput(
+      "Film.Noir" =  pickerInput(
         "select3",
         "Movie of Genre #3",
         choices = sort(subset(search, Film.Noir == 1)$title),
-        selected = sort(subset(search, Film.Noir == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Horror" =  selectInput(
+      "Horror" =  pickerInput(
         "select3",
         "Movie of Genre #3",
         choices = sort(subset(search, Horror == 1)$title),
-        selected = sort(subset(search, Horror == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Musical" =  selectInput(
+      "Musical" =  pickerInput(
         "select3",
         "Movie of Genre #3",
         choices = sort(subset(search, Musical == 1)$title),
-        selected = sort(subset(search, Musical == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Mystery" =  selectInput(
+      "Mystery" =  pickerInput(
         "select3",
         "Movie of Genre #3",
         choices = sort(subset(search, Mystery == 1)$title),
-        selected = sort(subset(search, Mystery == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Romance" =  selectInput(
+      "Romance" =  pickerInput(
         "select3",
         "Movie of Genre #3",
         choices = sort(subset(search, Romance == 1)$title),
-        selected = sort(subset(search, Romance == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Sci.Fi" =  selectInput(
+      "Sci.Fi" =  pickerInput(
         "select3",
         "Movie of Genre #3",
         choices = sort(subset(search, Sci.Fi == 1)$title),
-        selected = sort(subset(search, Sci.Fi == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Thriller" =  selectInput(
+      "Thriller" =  pickerInput(
         "select3",
         "Movie of Genre #3",
         choices = sort(subset(search, Thriller == 1)$title),
-        selected = sort(subset(search, Thriller == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "War" =  selectInput(
+      "War" =  pickerInput(
         "select3",
         "Movie of Genre #3",
         choices = sort(subset(search, War == 1)$title),
-        selected = sort(subset(search, War == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       ),
-      "Western" = selectInput(
+      "Western" = pickerInput(
         "select3",
         "Movie of Genre #3",
         choices = sort(subset(search, Western == 1)$title),
-        selected = sort(subset(search, Western == 1)$title)[1]
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
       )
     )
   })
