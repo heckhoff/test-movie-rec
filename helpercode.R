@@ -10,10 +10,10 @@ ratings <- read.csv("ratings.csv", header = TRUE)
 movies2 <-
   movies[-which((movies$movieId %in% ratings$movieId) == FALSE),]
 
-movie_recommendation <- function(input, input2, input3) {
-  #input = "Gladiator (2000)"
-  #input2 = "Aeon Flux (2005)"
-  #input3 = "Alexander (2004)"
+movie_recommendation <- function(movies2, ratings, input, input2, input3) {
+  input = "[REC] (2007)"
+  input2 = "Paranormal Activity (2009)"
+  input3 = "Ring, The (2002)"
   row_num <- which(movies2[, 2] == input)
   row_num2 <- which(movies2[, 2] == input2)
   row_num3 <- which(movies2[, 2] == input3)
@@ -28,20 +28,23 @@ movie_recommendation <- function(input, input2, input3) {
           userId ~ movieId,
           value.var = "rating",
           na.rm = FALSE)
+  browser()
   ratingmat <- ratingmat[, -1]
   colnames(userSelect) <- colnames(ratingmat)
   ratingmat2 <- rbind(userSelect, ratingmat)
   ratingmat2 <- as.matrix(ratingmat2)
-
   #Convert rating matrix into a sparse matrix
   ratingmat2 <- as(ratingmat2, "realRatingMatrix")
+  # ratingmat2 <- new("dgCMatrix", ratingmat2)
+  # ratingmat2 <- new("realRatingMatrix", data = ratingmat2)
 
   #Create Recommender Model. "UBCF" stands for user-based collaborative filtering
   recommender_model <-
-    Recommender(ratingmat2,
+    recommenderlab::Recommender(ratingmat2[-1],
                 method = "UBCF",
-                param = list(method = "Cosine", nn = 30))
-  recom <- predict(recommender_model, ratingmat2[1], n = 10)
+                param = list(method = "Cosine", nn = 30)
+                )
+  recom <- recommenderlab::predict(recommender_model, ratingmat2[1], n = 10)
   # recom <- predict(recommender_model, ratingmat2[1], n = 25)
   recom_list <- as(recom, "list")
   no_result <- data.frame(matrix(NA, 1))

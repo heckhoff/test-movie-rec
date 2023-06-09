@@ -76,7 +76,7 @@ ui <- fluidPage(
   fluidRow(
     column(
       2,
-      textInput("apiKey", "API Key", "sk-xxxxxxxxxxxxxxxxxxxx"),
+      textInput("apiKey", "API Key", "sk-xxxxx"),
       pickerInput(
         "model",
         "Model",
