@@ -7,8 +7,14 @@ source("helpercode.R")
 library(shinyjs)
 library(shinyWidgets)
 
-search <- read.csv("search.csv", stringsAsFactors = FALSE)
-ratings <- read.csv("ratings.csv", header = TRUE)
+# search2 <- read.csv("search.csv", stringsAsFactors = FALSE)
+search <- movies[genres != "(no genres listed)"]
+search <- search[, list(movieId = movieId, title = title, year = as.numeric(gsub(".*\\((\\d{4})\\)$", "\\1", title)), genre = unlist(strsplit(genres, "\\|"))), by = 1:nrow(search)]
+search <- search[!is.na(year)]
+search <- dcast(search, movieId + title + year ~ genre, fun.aggregate = length)
+setnames(search, old = c("Film-Noir", "Sci-Fi"), new = c("Film_Noir", "Sci_Fi"))
+
+# ratings <- read.csv("ratings.csv", header = TRUE)
 search <-
   search[-which((search$movieId %in% ratings$movieId) == FALSE), ]
 
@@ -29,12 +35,12 @@ genre_list <- c(
   "Documentary",
   "Drama",
   "Fantasy",
-  "Film.Noir",
+  "Film_Noir",
   "Horror",
   "Musical",
   "Mystery",
   "Romance",
-  "Sci.Fi",
+  "Sci_Fi",
   "Thriller",
   "War",
   "Western"
@@ -76,7 +82,7 @@ ui <- fluidPage(
   fluidRow(
     column(
       2,
-      textInput("apiKey", "API Key", "sk-xxxxx"),
+      textInput("apiKey", "API Key", "sk-xyz"),
       pickerInput(
         "model",
         "Model",
@@ -203,10 +209,10 @@ server <- function(input, output, session) {
         options = pickerOptions(liveSearch = TRUE,
                                 maxOptions = 1L)
       ),
-      "Film.Noir" =  pickerInput(
+      "Film_Noir" =  pickerInput(
         "select",
         "Movie of Genre #1",
-        choices = sort(subset(search, Film.Noir == 1)$title),
+        choices = sort(subset(search, Film_Noir == 1)$title),
         selected = NULL,
         multiple = TRUE,
         options = pickerOptions(liveSearch = TRUE,
@@ -248,10 +254,10 @@ server <- function(input, output, session) {
         options = pickerOptions(liveSearch = TRUE,
                                 maxOptions = 1L)
       ),
-      "Sci.Fi" =  pickerInput(
+      "Sci_Fi" =  pickerInput(
         "select",
         "Movie of Genre #1",
-        choices = sort(subset(search, Sci.Fi == 1)$title),
+        choices = sort(subset(search, Sci_Fi == 1)$title),
         selected = NULL,
         multiple = TRUE,
         options = pickerOptions(liveSearch = TRUE,
@@ -374,10 +380,10 @@ server <- function(input, output, session) {
         options = pickerOptions(liveSearch = TRUE,
                                 maxOptions = 1L)
       ),
-      "Film.Noir" =  pickerInput(
+      "Film_Noir" =  pickerInput(
         "select2",
         "Movie of Genre #2",
-        choices = sort(subset(search, Film.Noir == 1)$title),
+        choices = sort(subset(search, Film_Noir == 1)$title),
         selected = NULL,
         multiple = TRUE,
         options = pickerOptions(liveSearch = TRUE,
@@ -419,10 +425,10 @@ server <- function(input, output, session) {
         options = pickerOptions(liveSearch = TRUE,
                                 maxOptions = 1L)
       ),
-      "Sci.Fi" =  pickerInput(
+      "Sci_Fi" =  pickerInput(
         "select2",
         "Movie of Genre #2",
-        choices = sort(subset(search, Sci.Fi == 1)$title),
+        choices = sort(subset(search, Sci_Fi == 1)$title),
         selected = NULL,
         multiple = TRUE,
         options = pickerOptions(liveSearch = TRUE,
@@ -545,10 +551,10 @@ server <- function(input, output, session) {
         options = pickerOptions(liveSearch = TRUE,
                                 maxOptions = 1L)
       ),
-      "Film.Noir" =  pickerInput(
+      "Film_Noir" =  pickerInput(
         "select3",
         "Movie of Genre #3",
-        choices = sort(subset(search, Film.Noir == 1)$title),
+        choices = sort(subset(search, Film_Noir == 1)$title),
         selected = NULL,
         multiple = TRUE,
         options = pickerOptions(liveSearch = TRUE,
@@ -590,10 +596,10 @@ server <- function(input, output, session) {
         options = pickerOptions(liveSearch = TRUE,
                                 maxOptions = 1L)
       ),
-      "Sci.Fi" =  pickerInput(
+      "Sci_Fi" =  pickerInput(
         "select3",
         "Movie of Genre #3",
-        choices = sort(subset(search, Sci.Fi == 1)$title),
+        choices = sort(subset(search, Sci_Fi == 1)$title),
         selected = NULL,
         multiple = TRUE,
         options = pickerOptions(liveSearch = TRUE,
@@ -629,15 +635,16 @@ server <- function(input, output, session) {
     )
   })
 
+  recommendations <- reactive({movie_recommendation(input$select, input$select2, input$select3)})
   output$table <- renderTable({
-    movie_recommendation(input$select, input$select2, input$select3)
+    recommendations()
   })
 
   output$dynamic_value <- renderPrint({
     c(input$select, input$select2, input$select3)
   })
 
-  x = reactiveVal(0)
+  x <- reactiveVal(0)
   observeEvent(input$submit, {
     if (nchar(trimws(input$prompt)) > 0) {
       x(x() + 1) # increment x by 1
@@ -654,9 +661,9 @@ server <- function(input, output, session) {
           input$prompt,
           input$model,
           preferences = c(input$select, input$select2, input$select3),
-          recommendations = movie_recommendation(input$select, input$select2, input$select3),
+          recommendations = recommendations(),
           number = x(),
-          history = historyALL$df
+          history = as.data.table(historyALL$df)
         )
       historyALL$val <- chatGPT
       history <- data.frame(
