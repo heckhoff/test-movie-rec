@@ -47,7 +47,7 @@ ratings <- readRDS("movielens_full/ratings.RDS")
 
 movie_indices <- ratings[, unique(movieId)]
 
-set.seed(123)
+set.seed(1234)
 
 voted_items <- c(33493L)
 
@@ -60,6 +60,10 @@ missing_votes <- setdiff(movie_indices, voted_items)
 ratings <- rbindlist(list(user_vote, ratings))
 setorder(ratings, userId)
 
+ratings[, rating := rating - mean(rating), by = userId]
+
+ratings <- ratings[sample(.N, 1000000)]
+
 train_set <- recosystem::data_memory(
   user_index = ratings$userId,
   item_index = ratings$movieId,
@@ -67,10 +71,41 @@ train_set <- recosystem::data_memory(
   index1 = TRUE
 )
 
-
 rec <- Reco()
 
-rec$train(train_set, out_model = NULL, opts = list(nthread = 12))
+# res <- rec$tune(
+#   train_set,
+#   opts = list(
+#     # dim      = c(20L, 30L, 40L),
+#     dim      = c(30L, 40L),
+#     costp_l1 = c(0, 0.033),
+#     # costp_l2 = c(0.01, 0.033, 0.066, 0.1, 0.3),
+#     costq_l1 = c(0, 0.033),
+#     costq_l2 = c(0.01, 0.033),
+#     lrate    = c(0.033, 0.3),
+#     nthread = 10
+#   )
+# )
+#
+# res
+# res$min
+# res <- setDT(res$res)
+# res[, median(loss_fun), by = lrate]
+
+rec$train(
+  train_set,
+  out_model = NULL,
+  opts = list(
+    dim = 40L,
+    costp_l1 = 0.033,
+    costp_l2 = 0.1,
+    costq_l1 = 0,
+    costq_l2 = 0.033,
+    lrate = 0.1,
+    nthread = 10,
+    niter = 25
+  )
+)
 
 
 test_set <-
@@ -128,5 +163,65 @@ history[, index := 1L:nrow(history)]
 history_pairs <- split(x = history, by = "index")
 
 history_pairs <- lapply(X = history_pairs, function(row) {
-  do.call(list, args = list(role = ifelse(row[, pairs] == 1L, "user", "assistant"), content = row[, content]))
+  do.call(list, args = list(
+    role = ifelse(row[, pairs] == 1L, "user", "assistant"),
+    content = row[, content]
+  ))
 })
+
+write_function <- function(x) {
+  data <- rawToChar(x)
+  data_json <- jsonlite::fromJSON(data, simplifyVector = FALSE)
+  print(data_json)
+}
+
+write_function <- function(x) {
+  # browser()
+  data <- rawToChar(x)
+  data_json <- jsonlite::fromJSON(data, simplifyVector = FALSE)
+  message_content <- data_json$choices[[1]]$message$content
+
+  print(message_content)
+}
+
+POST(
+  url = "https://api.openai.com/v1/chat/completions",
+  add_headers(Authorization = paste("Bearer", apiKey2)),
+  content_type("application/json"),
+  encode = "json",
+  body =    body2,
+  stream = TRUE,
+  write_stream(function(x) {
+    print(length(x))
+    length(x)
+  })
+)
+
+
+
+
+
+h <- new_handle()
+handle_setopt(
+  h,
+  url = "https://api.openai.com/v1/chat/completions",
+  customrequest = "POST",
+  httpheader = c(
+    "Authorization" = paste("Bearer", apiKey2),
+    "Content-Type" = "application/json"
+  )
+)
+
+# Define the function that will handle each line of the response
+callback <- function(data, ...) {
+  print(data)
+}
+
+# Perform the request
+curl_fetch_multi(
+  h,
+  writefunction = callback,
+  done = function(res) {
+    print(res$status_code)
+  }
+)

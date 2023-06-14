@@ -9,10 +9,21 @@ library(shinyWidgets)
 
 # search2 <- read.csv("search.csv", stringsAsFactors = FALSE)
 search <- movies[genres != "(no genres listed)"]
-search <- search[, list(movieId = movieId, title = title, year = as.numeric(gsub(".*\\((\\d{4})\\)$", "\\1", title)), genre = unlist(strsplit(genres, "\\|"))), by = 1:nrow(search)]
+suppressWarnings({search <-
+  search[, list(
+    movieId = movieId,
+    title = title,
+    year = as.numeric(gsub(".*\\((\\d{4})\\)$", "\\1", title)),
+    genre = unlist(strsplit(genres, "\\|"))
+  ), by = 1:nrow(search)]})
 search <- search[!is.na(year)]
-search <- dcast(search, movieId + title + year ~ genre, fun.aggregate = length)
-setnames(search, old = c("Film-Noir", "Sci-Fi"), new = c("Film_Noir", "Sci_Fi"))
+search <-
+  dcast(search, movieId + title + year ~ genre, fun.aggregate = length)
+setnames(
+  search,
+  old = c("Film-Noir", "Sci-Fi"),
+  new = c("Film_Noir", "Sci_Fi")
+)
 
 # ratings <- read.csv("ratings.csv", header = TRUE)
 search <-
@@ -59,6 +70,10 @@ ui <- fluidPage(
         pickerInput("input_genre2", "Genre #2",
                     genre_list),
         pickerInput("input_genre3", "Genre #3",
+                    genre_list),
+        pickerInput("input_genre4", "Genre #4",
+                    genre_list),
+        pickerInput("input_genre5", "Genre #5",
                     genre_list)
         #submitButton("Update List of Movies")
       )
@@ -66,10 +81,14 @@ ui <- fluidPage(
     column(
       4,
       h3("Select Movies You Like of these Genres:"),
-      wellPanel(# This outputs the dynamic UI component
+      wellPanel(
+        # This outputs the dynamic UI component
         uiOutput("ui"),
         uiOutput("ui2"),
-        uiOutput("ui3"))
+        uiOutput("ui3"),
+        uiOutput("ui4"),
+        uiOutput("ui5")
+      )
     ),
     #submitButton("Get Recommendations")))))),
     column(
@@ -635,13 +654,366 @@ server <- function(input, output, session) {
     )
   })
 
-  recommendations <- reactive({movie_recommendation(input$select, input$select2, input$select3)})
+  output$ui4 <- renderUI({
+    if (is.null(input$input_genre4))
+      return()
+
+    switch(
+      input$input_genre4,
+      "Action" = pickerInput(
+        "select4",
+        "Movie of Genre #4",
+        choices = sort(subset(search, Action == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Adventure" = pickerInput(
+        "select4",
+        "Movie of Genre #4",
+        choices = sort(subset(search, Adventure == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Animation" =  pickerInput(
+        "select4",
+        "Movie of Genre #4",
+        choices = sort(subset(search, Animation == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Children" =  pickerInput(
+        "select4",
+        "Movie of Genre #4",
+        choices = sort(subset(search, Children == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Comedy" =  pickerInput(
+        "select4",
+        "Movie of Genre #4",
+        choices = sort(subset(search, Comedy == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Crime" =  pickerInput(
+        "select4",
+        "Movie of Genre #4",
+        choices = sort(subset(search, Crime == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Documentary" =  pickerInput(
+        "select4",
+        "Movie of Genre #4",
+        choices = sort(subset(search, Documentary == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Drama" =  pickerInput(
+        "select4",
+        "Movie of Genre #4",
+        choices = sort(subset(search, Drama == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Fantasy" =  pickerInput(
+        "select4",
+        "Movie of Genre #4",
+        choices = sort(subset(search, Fantasy == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Film_Noir" =  pickerInput(
+        "select4",
+        "Movie of Genre #4",
+        choices = sort(subset(search, Film_Noir == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Horror" =  pickerInput(
+        "select4",
+        "Movie of Genre #4",
+        choices = sort(subset(search, Horror == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Musical" =  pickerInput(
+        "select4",
+        "Movie of Genre #4",
+        choices = sort(subset(search, Musical == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Mystery" =  pickerInput(
+        "select4",
+        "Movie of Genre #4",
+        choices = sort(subset(search, Mystery == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Romance" =  pickerInput(
+        "select4",
+        "Movie of Genre #4",
+        choices = sort(subset(search, Romance == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Sci_Fi" =  pickerInput(
+        "select4",
+        "Movie of Genre #4",
+        choices = sort(subset(search, Sci_Fi == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Thriller" =  pickerInput(
+        "select4",
+        "Movie of Genre #4",
+        choices = sort(subset(search, Thriller == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "War" =  pickerInput(
+        "select4",
+        "Movie of Genre #4",
+        choices = sort(subset(search, War == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Western" = pickerInput(
+        "select4",
+        "Movie of Genre #4",
+        choices = sort(subset(search, Western == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      )
+    )
+  })
+
+  output$ui5 <- renderUI({
+    if (is.null(input$input_genre5))
+      return()
+
+    switch(
+      input$input_genre5,
+      "Action" = pickerInput(
+        "select5",
+        "Movie of Genre #5",
+        choices = sort(subset(search, Action == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Adventure" = pickerInput(
+        "select5",
+        "Movie of Genre #5",
+        choices = sort(subset(search, Adventure == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Animation" =  pickerInput(
+        "select5",
+        "Movie of Genre #5",
+        choices = sort(subset(search, Animation == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Children" =  pickerInput(
+        "select5",
+        "Movie of Genre #5",
+        choices = sort(subset(search, Children == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Comedy" =  pickerInput(
+        "select5",
+        "Movie of Genre #5",
+        choices = sort(subset(search, Comedy == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Crime" =  pickerInput(
+        "select5",
+        "Movie of Genre #5",
+        choices = sort(subset(search, Crime == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Documentary" =  pickerInput(
+        "select5",
+        "Movie of Genre #5",
+        choices = sort(subset(search, Documentary == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Drama" =  pickerInput(
+        "select5",
+        "Movie of Genre #5",
+        choices = sort(subset(search, Drama == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Fantasy" =  pickerInput(
+        "select5",
+        "Movie of Genre #5",
+        choices = sort(subset(search, Fantasy == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Film_Noir" =  pickerInput(
+        "select5",
+        "Movie of Genre #5",
+        choices = sort(subset(search, Film_Noir == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Horror" =  pickerInput(
+        "select5",
+        "Movie of Genre #5",
+        choices = sort(subset(search, Horror == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Musical" =  pickerInput(
+        "select5",
+        "Movie of Genre #5",
+        choices = sort(subset(search, Musical == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Mystery" =  pickerInput(
+        "select5",
+        "Movie of Genre #5",
+        choices = sort(subset(search, Mystery == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Romance" =  pickerInput(
+        "select5",
+        "Movie of Genre #5",
+        choices = sort(subset(search, Romance == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Sci_Fi" =  pickerInput(
+        "select5",
+        "Movie of Genre #5",
+        choices = sort(subset(search, Sci_Fi == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Thriller" =  pickerInput(
+        "select5",
+        "Movie of Genre #5",
+        choices = sort(subset(search, Thriller == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "War" =  pickerInput(
+        "select5",
+        "Movie of Genre #5",
+        choices = sort(subset(search, War == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      ),
+      "Western" = pickerInput(
+        "select5",
+        "Movie of Genre #5",
+        choices = sort(subset(search, Western == 1)$title),
+        selected = NULL,
+        multiple = TRUE,
+        options = pickerOptions(liveSearch = TRUE,
+                                maxOptions = 1L)
+      )
+    )
+  })
+
+  recommendations <-
+    reactive({
+      movie_recommendation(input$select,
+                           input$select2,
+                           input$select3,
+                           input$select4,
+                           input$select5)
+    })
   output$table <- renderTable({
     recommendations()
   })
 
   output$dynamic_value <- renderPrint({
-    c(input$select, input$select2, input$select3)
+    c(input$select,
+      input$select2,
+      input$select3,
+      input$select4,
+      input$select5)
   })
 
   x <- reactiveVal(0)
@@ -660,7 +1032,13 @@ server <- function(input, output, session) {
           input$apiKey,
           input$prompt,
           input$model,
-          preferences = c(input$select, input$select2, input$select3),
+          preferences = c(
+            input$select,
+            input$select2,
+            input$select3,
+            input$select4,
+            input$select5
+          ),
           recommendations = recommendations(),
           number = x(),
           history = as.data.table(historyALL$df)
@@ -694,7 +1072,12 @@ server <- function(input, output, session) {
             # <img src='boy.avif' class='img-wrapper2'>
             # "
             #               ),
-            paste(historyALL$df[x, "content"], "<br/>", "<br/>"))
+            paste0(
+              ifelse(x %% 2 == 0, yes = "<b>Assistant:</b><br/>", no = "<b>You:</b><br/>"),
+              historyALL$df[x, "content"],
+              "<br/>",
+              "<br/>"
+            ))
           # )
           # )
         })
